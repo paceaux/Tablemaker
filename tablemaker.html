@@ -66,6 +66,13 @@
   <legend>Table Properties</legend>
   <label for="twidth">Table Width</label>
   <input type="range" name="twidth" id="twidth" step="10px" max="300" />
+    <div>
+    
+        <input type="radio" name="twMeasure" value="%" />%</div>
+    <div>
+    
+    <input type="radio" name="twMeasure" value="px" />px
+    </div>
 </fieldset>
 <fieldset id="rowProps">
 <legend>Row Formatting</legend>
@@ -125,8 +132,8 @@
 </div>
 ​
   <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script src="https://dl.dropbox.com/s/qv9ycbgpvik2946/jquery-ui.custom.min.js?dl=1"></script>
+<script src="jquery-1.7.2.min.js"></script>
+<script src="jquery-ui-1.8.22.custom.min.js"></script>
 <script src="tablemaker.js">
 </script>
   <!-- end scripts -->
