@@ -24,8 +24,8 @@ $tf = $t.find('tfoot');
 //  2  a colgroup editor: add spans to col groups. also visually show how colgroups are spread
 //  3  Custom row Width
 //  4  When merging... need to preserve data some how
-//  5  
-//
+//  5  Short cut for: new column/ row, col width
+//   6 
 //
 //----------/TODO---------
 
@@ -191,20 +191,43 @@ $('th').live('dblclick', function(e){
 });
 //MERGE FUNCTIONS
 function mergeToRight(el){
-    if(!$(el).is(':last-child')){
-        var nextSpan = $(el).next('td, th').attr('colspan') == null ? 1 : parseInt($(el).next('td,th').attr('colspan'),10);
-        var span = $(el).attr('colspan') == null ? (1 + nextSpan) : parseInt($(el).attr('colspan') +nextSpan,10);
-        $(el).attr('colspan', span); 
-        $(el).next().remove();
-    }
+    if ($(el).parents('tr').is(':only-child')){
+        remCol();
+    } else{
+        if(!$(el).is(':last-child')){
+            var rowSpan = $(el).attr('rowspan') == null ? parseInt(1,10) : parseInt($(el).attr('rowspan'),10);
+            var position = $(el).index();
+            var rowPosition = $(el).parents('tr').index();
+            var nextSpan = $(el).next('td, th').attr('colspan') == null ? 1 : parseInt($(el).next('td,th').attr('colspan'),10);
+            var span = $(el).attr('colspan') == null ? (1 + nextSpan) : parseInt($(el).attr('colspan'),10)+nextSpan;
+            $(el).attr('colspan', span); 
+            if (rowSpan == 1){
+                $(el).next().remove();
+            } else if(rowSpan > 1){
+                 $(el).next().remove();
+                var start = rowPosition+1;
+                var stop = rowPosition + rowSpan;
+                for (i = start; i < stop; i++){
+                $t.find('tr').eq(i).find('td, th').eq(position).remove();
+                }
+
+                    
+                
+                }
+            }
+        }
 }
 function mergeToLeft(el){
+        if ($(el).parents('tr').is(':only-child')){
+            remCol();
+    }else {
     if (!$(el).is(':first-child')){
         var nextSpan = $(el).prev('td, th').attr('colspan') == null ? 1 : parseInt($(el).prev('td,th').attr('colspan'),10);
         var span = $(el).attr('colspan') == null ? (1+nextSpan) : parseInt($(el).attr('colspan')+nextSpan,10);
         $(el).prev().attr('colspan', span);
         $(el).remove();  
     } 
+        }
 }
 function mergeUp(el){
     //TODO: NEED A LOOP TO CHECK AND SEE
@@ -299,7 +322,24 @@ $t.find('td').live('keydown', function(e){
                 break;
             default: break;                 
             }
-    }
+    };
+    //plus
+    if (e.keyCode == 82){
+        switch( e.keyCode){
+            case 187:
+                alert(e.keyCode);
+                addRow();
+                break;
+            case 189: 
+                alert(e.keyCode);
+                remRow();
+                break;
+                
+            default:break;
+        }
+   };
+    //minus
+
 });
 //---
 //STYLE FUNCTIONS 
