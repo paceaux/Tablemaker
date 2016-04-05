@@ -10,8 +10,7 @@ console.clear();
 #TODOS
 1. create add table Col <col> functionality
 2. create ability to designate which <col> for which colgroup
-3. create a class updater method (should run after add/del, merge)
-4. create a "switch in place" method for converting a td into a th
+3. create a "switch in place" method for converting a td into a th
 */
 var TableMaker = function(configData) {
   this.config = configData !== undefined ? configData : tmDefaultConfig;
@@ -138,7 +137,7 @@ var TableMaker = function(configData) {
   /*==========
   #METHODS #ROWS
   ==========*/
-  
+  //#TODO make sure changes to the rows are changes to the config
   this.addRow = function(rowContainer, index, nCells) {
     nCells = nCells !== undefined ? nCells : rowContainer.rows[rowContainer.rows.length-1].cells.length;
     var row = this._Row(rowContainer, index, nCells);
@@ -168,7 +167,7 @@ var TableMaker = function(configData) {
   /*==========
   #METHODS #COLS
   ==========*/
-
+//#TODO Mke sure that changes to the cols also adjust changes to the config
 //#TODO figure out what we're going to call the thing that adds the <col> element
   this.addCol = function(rowContainer, index) {
     var _this = this;
@@ -210,11 +209,13 @@ var TableMaker = function(configData) {
   this.addColGroup = function(index) {
     var colgroup = document.createElement('colgroup');
     this.table.insertBefore(colgroup, this.table.querySelector(':first-child'));
+    this.config.layout.colgroups++;
   };
 
   this.delColGroup = function(index) {
     var colgroups = this.table.querySelectorAll('colgroup');
     this.table.removeNode(colgroups[index]);
+    this.config.layout.colgroups--;
   };
 
   this.addColGroups = function(nCols) {
@@ -310,21 +311,25 @@ var TableMaker = function(configData) {
   this.addCaption = function (text) {
     if (text !== undefined && text !== '') {
       this.caption = this._Caption(text);  
+      this.config.meta.caption = text;
     }
   };
   
   this.delCaption = function () {
     this.table.deleteCaption();
+    this.config.meta.caption = '';
   };
 
   this.addSummary = function (text) {
     if (text !== undefined && text !== '' ) {
       this.table.summary = text;
+      this.config.meta.summary = text;
     }
   };
   
   this.delSummary = function () {
     this.table.removeAttribute('summary');
+    this.config.meta.summary = '';
   };
 
     /*==========
