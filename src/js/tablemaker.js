@@ -160,7 +160,8 @@ var TableMaker = function(configData) {
   this.delRows = function(rowContainer, start, end) {
     end = end !== undefined ? end : start + 1;
     
-    for (var i = start; i < end; i++) {
+    for (var i = end; i >= start; i--) {
+      console.log(i);
       this.delRow(rowContainer, i);
     }
   };
@@ -170,14 +171,20 @@ var TableMaker = function(configData) {
   ==========*/
 
 //#TODO figure out what we're going to call the thing that adds the <col> element
-//#TODO why is there an addrows, but no addcols?
   this.addCol = function(rowContainer, index) {
     var _this = this;
     var rows = rowContainer.rows;
+    index = index !== undefined ? index : -1;
 
-    [].forEach.call(rows, function(row) {
+    [].forEach.call(rows, function (row) {
       _this.addCell('td', row, index );
     });
+  };
+
+  this.addCols = function (rowContainer, nCols, index) {
+    for (var i = 0; i < nCols; i++) {
+      this.addCol(rowContainer, index);
+    }
   };
   
   this.delCol = function(rowContainer, start, end) {
@@ -188,6 +195,7 @@ var TableMaker = function(configData) {
 
     [].forEach.call(rows, function (row) {
       var cells = row.cells;
+
       [].forEach.call(cells, function (cell, index) {
         if (index >= start && index < end) {
           _this.delCell(row,index);
