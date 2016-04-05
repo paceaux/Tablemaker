@@ -29,11 +29,11 @@ var TableMaker = function(configData) {
       cell.innerText = text;
     }
     
-    if (this.config.classes.cols.even && this.config.classes.cols.even !== '' && (row.cells.length + 1) %2 === 0 ) {
+    if (this.config.classes.cols.even && this.config.classes.cols.even !== '' && (row.cells.length ) %2 === 0 ) {
       cell.classList.add(this.config.classes.cols.even);
     }
     
-    if (this.config.classes.cols.odd && this.config.classes.cols.odd !== '' && !((row.cells.length + 1) %2 === 0) ) {
+    if (this.config.classes.cols.odd && this.config.classes.cols.odd !== '' && !((row.cells.length ) %2 === 0) ) {
       cell.classList.add(this.config.classes.cols.odd);
     }
     
@@ -161,7 +161,6 @@ var TableMaker = function(configData) {
     end = end !== undefined ? end : start + 1;
     
     for (var i = end; i >= start; i--) {
-      console.log(i);
       this.delRow(rowContainer, i);
     }
   };
@@ -299,8 +298,8 @@ var TableMaker = function(configData) {
       mergeTo.colSpan = range.length + 1;
     } else {
         mergeTo.colSpan =  range[range.length-1].length;
-      mergeTo.rowSpan = range.length;
-            this.delRange(range);
+        mergeTo.rowSpan = range.length;
+        this.delRange(range);
     }
   };
   

@@ -23,12 +23,12 @@ tableMakerUI.init = function() {
   // this is really here just to test out different features of TableMaker
   config.layout.body.rows = 4;
   config.layout.body.cols = 4;
-  config.classes.rows.hasEven = true;
-  config.classes.rows.hasOdd = true;
+  config.classes.rows.even = 'tr--even';
+  config.classes.rows.odd = 'tr--odd';
   config.classes.rows.nth = 3;
-  config.classes.cols.hasEven = true;
+  config.classes.cols.even = 'td--even';
   config.classes.cols.nth = 3;
-  config.classes.cols.hasOdd = true;
+  config.classes.cols.odd = 'td--odd';
   
   this.outputTable = new TableMaker(config);
   
@@ -181,8 +181,6 @@ tableMakerUI.callbacks = {
     }
     
     if (rows < _this.outputTable.body.rows.length) {
-      console.log("removing", dif);
-      console.log('start',( _this.outputTable.body.rows.length ) + dif);
       _this.outputTable.delRows( _this.outputTable.body,(_this.outputTable.body.rows.length ) + dif);
     }
   },
@@ -197,18 +195,46 @@ tableMakerUI.callbacks = {
         text = e.target.value;
         
     _this.functions.updateSummary.call(tableMakerUI, text);
-  }
+  },
+  changeRowClass: function (e) {
+    var _this = tableMakerUI;
+    if (_this.outputTable.config.classes.rows[e.target.name] !== '') {
+      _this.outputTable.delClasses(_this.outputTable.body,'.'+_this.outputTable.config.classes.rows[e.target.name]);
+    }
+
+    _this.outputTable.config.classes.rows[e.target.name] = e.target.value;
+    _this.outputTable.refreshRowClasses(_this.outputTable.body);
+  },
+  changeColClass: function (e) {
+    var _this = tableMakerUI;
+
+    console.log('.'+_this.outputTable.config.classes.cols[e.target.name]);
+    if (_this.outputTable.config.classes.cols[e.target.name] !== '') {
+      _this.outputTable.delClasses(_this.outputTable.body,'.'+_this.outputTable.config.classes.cols[e.target.name]);
+    }
+      
+    _this.outputTable.config.classes.cols[e.target.name] = e.target.value;
+    _this.outputTable.refreshColClasses(_this.outputTable.body);
+  },
 };
 
 tableMakerUI.bindEvts = function(selectors, callbacks) {
   document.querySelector(selectors.colNum).addEventListener('change', callbacks.changeCols);
   document.querySelector(selectors.addCol).addEventListener('click', callbacks.addCol);
   document.querySelector(selectors.remCol).addEventListener('click', callbacks.remCol);  
+
   document.querySelector(selectors.rowNum).addEventListener('change', callbacks.changeRows);
   document.querySelector(selectors.addRow).addEventListener('click', callbacks.addRow);
   document.querySelector(selectors.remRow).addEventListener('click', callbacks.remRow);
+
   document.querySelector(selectors.tcaption).addEventListener('change', callbacks.changeCaption);
   document.querySelector(selectors.tsummary).addEventListener('change', callbacks.changeSummary);
+
+  document.querySelector(selectors.evenRow).addEventListener('change', callbacks.changeRowClass);
+  document.querySelector(selectors.oddRow).addEventListener('change', callbacks.changeRowClass);
+
+  document.querySelector(selectors.evenCell).addEventListener('change', callbacks.changeColClass);
+  document.querySelector(selectors.oddCell).addEventListener('change', callbacks.changeColClass);
 };
 
 tableMakerUI.init();
