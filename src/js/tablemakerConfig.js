@@ -27,14 +27,14 @@ var tmDefaultConfig = {
   classes: {
     table: '',
     rows: {
-      hasEven: false,
-      hasOdd: false,
-      nth: 'none',
+      even: '',
+      odd: '',
+      nth: '',
     },
     cols: {
-      hasEven: false,
-      hasOdd: false,
-      nth: 'none',
+      even: '',
+      odd: '',
+      nth: '',
     }
   },
 };

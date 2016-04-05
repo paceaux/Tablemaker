@@ -29,16 +29,16 @@ var TableMaker = function(configData) {
       cell.innerText = text;
     }
     
-    if (this.config.classes.cols.hasEven && (row.cells.length + 1) %2 === 0 ) {
-      cell.classList.add('td--odd');
+    if (this.config.classes.cols.even && this.config.classes.cols.even !== '' && (row.cells.length + 1) %2 === 0 ) {
+      cell.classList.add(this.config.classes.cols.even);
     }
     
-    if (this.config.classes.cols.hasOdd && !((row.cells.length + 1) %2 === 0) ) {
-      cell.classList.add('td--even');
+    if (this.config.classes.cols.odd && this.config.classes.cols.odd !== '' && !((row.cells.length + 1) %2 === 0) ) {
+      cell.classList.add(this.config.classes.cols.odd);
     }
     
-    if (this.config.classes.cols.nth !== 'none' && ((row.cells.length)%this.config.classes.cols.nth === 0) ) {
-      cell.classList.add('td--nth-' + this.config.classes.cols.nth);
+    if (this.config.classes.cols.nth && this.config.classes.cols.nth !== '' && ((row.cells.length)%this.config.classes.cols.nth === 0) ) {
+      cell.classList.add('nth--' + this.config.classes.cols.nth);
     }
     
     return cell;
@@ -83,16 +83,16 @@ var TableMaker = function(configData) {
       this.addCell('td', row, i);
     }
  
-    if (this.config.classes.rows.hasEven && (rowContainer.rows.length) %2 === 0 ) {
-      row.classList.add('tr--even');
+    if (this.config.classes.rows.even && this.config.classes.rows.even !== ''  && (rowContainer.rows.length) %2 === 0 ) {
+      row.classList.add(this.config.classes.rows.even);
     }
     
-    if (this.config.classes.rows.hasOdd && !((rowContainer.rows.length) %2 === 0) ) {
-      row.classList.add('tr--odd');
+    if (this.config.classes.rows.odd && this.config.classes.rows.odd !== '' && !((rowContainer.rows.length) %2 === 0) ) {
+      row.classList.add(this.config.classes.rows.odd);
     }
     
-    if (this.config.classes.rows.nth !== 'none' && ((rowContainer.rows.length)%this.config.classes.rows.nth === 0) ) {
-      row.classList.add('tr--nth-' + this.config.classes.rows.nth);
+    if (this.config.classes.rows.nth  && this.config.classes.rows.nth !== '' && ((rowContainer.rows.length)%this.config.classes.rows.nth === 0) ) {
+      row.classList.add('nth--' + this.config.classes.rows.nth);
     }
     
     return row;
@@ -326,6 +326,89 @@ var TableMaker = function(configData) {
   
   this.delSummary = function () {
     this.table.removeAttribute('summary');
+  };
+
+    /*==========
+  #METHODS #CLASSES
+  ==========*/
+  this.addClasses = function (rowContainer, selector, classnames) {
+    var collection = rowContainer.querySelectorAll(selector);
+
+    classnames = Array.isArray(classnames) ? classnames : classnames.split(' ');
+
+    [].forEach.call(collection, function (item) {
+
+        classnames.forEach(function (classname) {
+          item.classList.add(classname);
+        })
+    });
+  };
+
+  this.delClasses = function (rowContainer, selector, classnames) {
+    var collection = rowContainer.querySelectorAll(selector);
+
+    classnames = classnames !== undefined ? classnames : selector.substr(1);
+    classnames = Array.isArray(classnames) ? classnames : classnames.split(' ');
+
+    [].forEach.call(collection, function (item) {
+
+        classnames.forEach(function (classname) {
+          item.classList.remove(classname);
+        })
+    });
+  };
+  
+  this.refreshRowClasses = function (rowContainer) {
+    var _this = this,
+      rowClasses = _this.config.classes.rows;
+    var rows = rowContainer.rows;
+
+    [].forEach.call(rows, function (row, i) {
+      i = i+1;
+
+      if (rowClasses.even && rowClasses.even !== ''  && i %2 === 0 ) {
+        row.classList.add(rowClasses.even);
+      }
+      
+      if (rowClasses.odd && rowClasses.odd !== '' && !(i %2 === 0) ) {
+        row.classList.add(rowClasses.odd);
+      }
+      
+      if (rowClasses.nth  && rowClasses.nth !== '' && (i%rowClasses.nth === 0) ) {
+        row.classList.add('nth--' + rowClasses.nth);
+      }
+    });
+  };
+
+  this.refreshColClasses = function (rowContainer) {
+    var _this = this,
+      colClasses = _this.config.classes.cols;
+
+    var rows = rowContainer.rows;
+
+    [].forEach.call(rows, function (row) {
+
+      [].forEach.call(row.cells, function (cell, i) {
+        i = i+1;
+
+        if (colClasses.even && colClasses.even !== ''  && i %2 === 0 ) {
+          cell.classList.add(colClasses.even);
+        }
+        
+        if (colClasses.odd && colClasses.odd !== '' && !(i %2 === 0) ) {
+          cell.classList.add(colClasses.odd);
+        }
+        
+        if (colClasses.nth  && colClasses.nth !== '' && (i%colClasses.nth === 0) ) {
+          cell.classList.add('nth--' + colClasses.nth);
+        }
+      });
+    });
+  };
+
+  this.refreshClasses = function(rowContainer) {
+    this.refreshColClasses(rowContainer);
+    this.refreshRowClasses(rowConainer);
   };
   
   /*==========
