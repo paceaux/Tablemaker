@@ -114,6 +114,27 @@ var TableMaker = function(configData) {
   /*==========
   #METHODS
   ==========*/
+
+  this.updateLayout = function (rowContainer, prop, value) {
+    var containerName = rowContainer.nodeName;
+    var layoutProp;
+
+    switch(containerName) {
+        case "TBODY":
+          layoutProp = 'body';
+          break;
+        case 'THEAD':
+          layoutProp = 'header';
+          break;
+        case 'TFOOT':
+          layoutProp = 'footer';
+          break;
+        default:
+          break;
+    }
+    this.config.layout[layoutProp][prop] = value;
+    return this.config[layoutProp];
+  };
   
   this.addBody = function() {
     this.body = this._Body();
@@ -141,12 +162,15 @@ var TableMaker = function(configData) {
   this.addRow = function(rowContainer, index, nCells) {
     nCells = nCells !== undefined ? nCells : rowContainer.rows[rowContainer.rows.length-1].cells.length;
     var row = this._Row(rowContainer, index, nCells);
-    
+
+    this.updateLayout(rowContainer,'rows', rowContainer.rows.length);
+
     return row;
   };
 
   this.delRow = function(rowContainer, index) {
     rowContainer.deleteRow(index);
+    this.updateLayout(rowContainer,'rows', rowContainer.rows.length);
   };
 
 //#TODO consider merging addrows with addrow?
@@ -157,8 +181,7 @@ var TableMaker = function(configData) {
   };
 
   this.delRows = function(rowContainer, start, end) {
-    end = end !== undefined ? end : start + 1;
-    
+    end = end !== undefined ? end : rowContainer.rows.length-1;
     for (var i = end; i >= start; i--) {
       this.delRow(rowContainer, i);
     }
@@ -176,6 +199,7 @@ var TableMaker = function(configData) {
 
     [].forEach.call(rows, function (row) {
       _this.addCell('td', row, index );
+      _this.updateLayout(rowContainer, 'cols',  row.cells.length + 1);
     });
   };
 
@@ -185,23 +209,34 @@ var TableMaker = function(configData) {
     }
   };
   
-  this.delCol = function(rowContainer, start, end) {
+  this.delCol = function(rowContainer, index) {
     var _this = this;
     var rows = rowContainer.rows;
 
-    end = end !== undefined ? end : start + 1;
+    var end = index;
 
     [].forEach.call(rows, function (row) {
-      var cells = row.cells;
-
-      [].forEach.call(cells, function (cell, index) {
-        if (index >= start && index < end) {
-          _this.delCell(row,index);
-        }
-      });
+        _this.delCell(row, index);
     });
+
+    _this.updateLayout(rowContainer, 'cols',  rows[0].cells.length);
   };
 
+  this.delCols = function(rowContainer, start, end) {
+    var _this = this;
+    var rows = rowContainer.rows;
+
+    end = end !== undefined ? end : rowContainer.rows[0].cells.length -1;
+
+    [].forEach.call(rows, function (row) {
+
+      for (var i = end; i>= start; i--) {
+        _this.delCell(row, i)
+      }
+
+    });
+    _this.updateLayout(rowContainer, 'cols',  rows[0].cells.length);
+  };
   /*==========
   #METHODS #COLGROUP
   ==========*/
@@ -210,6 +245,7 @@ var TableMaker = function(configData) {
     var colgroup = document.createElement('colgroup');
     this.table.insertBefore(colgroup, this.table.querySelector(':first-child'));
     this.config.layout.colgroups++;
+    return colgroup;
   };
 
   this.delColGroup = function(index) {

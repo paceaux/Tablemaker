@@ -135,9 +135,9 @@ tableMakerUI.callbacks = {
     if (cols > _this.outputTable.body.rows[0].cells.length) {
       _this.outputTable.addCols(_this.outputTable.body, dif);
     }
-    
+
     if (cols < _this.outputTable.body.rows[0].cells.length) {
-      _this.outputTable.delCol(_this.outputTable.body, (_this.outputTable.body.rows[0].cells.length -1) + dif, _this.outputTable.body.rows[0].cells.length -1);
+      _this.outputTable.delCols(_this.outputTable.body, _this.outputTable.body.rows[0].cells.length  + dif);
     }
     
   },
@@ -179,9 +179,9 @@ tableMakerUI.callbacks = {
     if (rows > _this.outputTable.body.rows.length) {
       _this.outputTable.addRows(_this.outputTable.body, dif);
     }
-    
+
     if (rows < _this.outputTable.body.rows.length) {
-      _this.outputTable.delRows( _this.outputTable.body,(_this.outputTable.body.rows.length ) + dif);
+      _this.outputTable.delRows( _this.outputTable.body,(_this.outputTable.body.rows.length ) + dif );
     }
   },
   changeCaption: function (e) {
@@ -208,7 +208,6 @@ tableMakerUI.callbacks = {
   changeColClass: function (e) {
     var _this = tableMakerUI;
 
-    console.log('.'+_this.outputTable.config.classes.cols[e.target.name]);
     if (_this.outputTable.config.classes.cols[e.target.name] !== '') {
       _this.outputTable.delClasses(_this.outputTable.body,'.'+_this.outputTable.config.classes.cols[e.target.name]);
     }
