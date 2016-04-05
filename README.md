@@ -2,7 +2,7 @@
 
 An API and a user interface for generating HTML tables. 
 
-**Document**:       FlexModal, the jQuery Plugin
+**Document**:       TableMaker
 
 **Author**:         Frank M. Taylor
 
