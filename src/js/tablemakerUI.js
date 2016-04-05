@@ -128,15 +128,16 @@ tableMakerUI.callbacks = {
   changeCols: function () {
     var _this = tableMakerUI,
         colNum = document.querySelector(_this.selectors.colNum),
-        cols = parseInt(colNum.value, 10);
-    
+        cols = parseInt(colNum.value, 10),
+        dif = cols - _this.outputTable.body.rows[0].cells.length;
+
     // todo: move this into the functions.updatecols
     if (cols > _this.outputTable.body.rows[0].cells.length) {
-      _this.outputTable.addCol(_this.outputTable.body, cols -  _this.outputTable.body.rows[0].cells.length);
+      _this.outputTable.addCols(_this.outputTable.body, dif);
     }
     
     if (cols < _this.outputTable.body.rows[0].cells.length) {
-      _this.outputTable.delCol(_this.outputTable.body, _this.outputTable.body.rows[0].cells.length - cols);
+      _this.outputTable.delCol(_this.outputTable.body, (_this.outputTable.body.rows[0].cells.length -1) + dif, _this.outputTable.body.rows[0].cells.length -1);
     }
     
   },
@@ -171,15 +172,18 @@ tableMakerUI.callbacks = {
   changeRows: function () {
     var _this = tableMakerUI,
         rowNum = document.querySelector(_this.selectors.rowNum),
-        rows = parseInt(rowNum.value, 10);
+        rows = parseInt(rowNum.value, 10),
+        dif = rows - _this.outputTable.body.rows.length;
     
     //todo: move this into the functions.updaterows
     if (rows > _this.outputTable.body.rows.length) {
-      _this.outputTable.addRow(_this.outputTable.body,rows - _this.outputTable.body.rows.length);
+      _this.outputTable.addRows(_this.outputTable.body, dif);
     }
     
     if (rows < _this.outputTable.body.rows.length) {
-      _this.outputTable.delRow( _this.outputTable.body,_this.outputTable.body.rows.length - rows, _this.outputTable.body.rows.length);
+      console.log("removing", dif);
+      console.log('start',( _this.outputTable.body.rows.length ) + dif);
+      _this.outputTable.delRows( _this.outputTable.body,(_this.outputTable.body.rows.length ) + dif);
     }
   },
   changeCaption: function (e) {
