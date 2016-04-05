@@ -1,4 +1,3 @@
-
   /*==========
   #TABLEMAKERUI 
   ==========*/
@@ -72,7 +71,6 @@ tableMakerUI.functions = {
 
   },
   updateCaption: function (text) {
-    console.log(this);
     if (text !== '' || text !== undefined) {
       this.outputTable.addCaption(text);
     }
@@ -138,7 +136,7 @@ tableMakerUI.callbacks = {
     }
     
     if (cols < _this.outputTable.body.rows[0].cells.length) {
-      _this.outputTable.delCol(_this.outputTable.body, _this.outputTable.body.rows[0].cells.length - cols,  _this.outputTable.body.rows[0].cells.length);
+      _this.outputTable.delCol(_this.outputTable.body, _this.outputTable.body.rows[0].cells.length - cols);
     }
     
   },
