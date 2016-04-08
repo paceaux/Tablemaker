@@ -330,14 +330,31 @@ var TableMaker = function(configData) {
     var is2d = Array.isArray(range[0]);
     var mergeTo =is2d ? range[0].shift() : range.shift();
     //#TODO Sort out what to do when merging an already merged cell
+
+    var colspans = 0;
+    var rowspans = 0;
+
     if (!is2d) {
+      range.forEach(function (cell) {
+        colspans = cell.colSpan + colspans;
+      });
+
       this.delRange(range);
-      mergeTo.colSpan = range.length + 1;
+      mergeTo.colSpan = mergeTo.colSpan + colspans;
+
     } else {
-        mergeTo.colSpan =  range[range.length-1].length;
-        mergeTo.rowSpan = range.length;
-        this.delRange(range);
+      range.forEach(function (childRange) {
+        childRange.forEach(function (cell) {
+          colspans = cell.colSpan + colspans;
+          rowspans = cell.rowSpan + rowspans;
+        });
+      });
+      
+      mergeTo.colSpan = mergeTo.colSpan + colspans ;
+      mergeTo.rowSpan = range.length;
+      this.delRange(range);
     }
+    return mergeTo;
   };
   
   /*==========
