@@ -11,15 +11,21 @@
     "url": "git+https://github.com/paceaux/Tablemaker.git"
   },
   "keywords": [
-    "JavaScript",
+    "API",
     "HTML",
-    "Table",
-    "API"
+    "JavaScript",
+    "Table"
   ],
   "author": "Frank M. Taylor (Paceaux)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/paceaux/Tablemaker/issues"
   },
-  "homepage": "https://github.com/paceaux/Tablemaker#readme"
+  "homepage": "https://github.com/paceaux/Tablemaker#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-filter": "^4.0.0",
+    "gulp-stylus": "^2.3.1"
+  }
 }
